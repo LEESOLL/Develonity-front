@@ -1,0 +1,67 @@
+
+  /* ---------------------------------------------------------- */
+   /* paging */
+   /* ---------------------------------------------------------- */
+div.paging {
+     text-align: center;
+     /* margin-top: 20px; */
+     /* height: 27px; */
+ }
+
+ div.paging .arrow {
+     display: inline-block;
+     vertical-align: middle;
+     margin: 0 3px;
+ }
+
+ div.paging .arrow em {
+     text-indent: -9999px;
+     display: inline-block;
+     vertical-align: middle;
+     background: url(../images/admin.png) no-repeat;
+     cursor: pointer;
+     width: 27px;
+     height: 26px;
+     margin-left: 2px;
+ }
+
+ div.paging .arrow em.first {
+     background-position: 0px -120px;
+ }
+
+ div.paging .arrow em.prev {
+     background-position: -30px -120px;
+ }
+
+ div.paging .arrow em.next {
+     background-position: 0px -170px;
+ }
+
+ div.paging .arrow em.last {
+     background-position: -30px -170px;
+ }
+
+ div.paging .number a {
+     display: inline-block;
+     vertical-align: middle;
+     border: 1px solid #d7d7d7;
+     border-radius: 3px;
+     background: red;
+     height: 24px;
+     padding: 0 8px;
+     line-height: 24px;
+     margin-left: 5px;
+     color: #898989;
+     cursor: pointer;
+     behavior: url(../js/pie.htc);
+ }
+
+ div.paging .number a.selected {
+     border: 2px solid #898989;
+     /* background: #3893da; */
+     color: #898989;
+ }
+
+ div.paging .number a:first-child {
+     margin-left: 2px;
+ }

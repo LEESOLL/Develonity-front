@@ -19,8 +19,11 @@
   <link rel="stylesheet" href="css/aos.css">
 
   <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/paging.css">
 
 </head>
+
+
 
 <body>
 
@@ -116,15 +119,20 @@
             <div class="row" data-aos="fade-up">
               <div class="col-md-12 text-center">
                 <div class="site-block-27">
-                  <ul id="pages">
-                    <!-- <li><a href="#">&lt;</a></li>
+                  <!-- <ul id="pages">
+                    <li><a href="#">&lt;</a></li>
                     <li class="active"><span>1</span></li>
                     <li><a href="#">2</a></li>
                     <li><a href="#">3</a></li>
                     <li><a href="#">4</a></li>
                     <li><a href="#">5</a></li>
-                    <li><a href="#">&gt;</a></li> -->
-                  </ul>
+                    <li><a href="#">&gt;</a></li>
+                  </ul> -->
+
+                  
+                  <ul class="paging" id="pagingArea"></ul>
+				          <!-- <div class="paging" id="pagingArea"></div> -->
+
                 </div>
               </div>
             </div>
@@ -203,6 +211,11 @@
 
     // 상품가져오는 API 호출하는 함수
     function getItems(category, currentPage, sorting, isAsc) {
+
+      console.log(category)
+      console.log(currentPage)
+      console.log(sorting)
+      console.log(isAsc)
       var settings = {
         "url": `http://localhost:8080/api/gift-cards/category?category=${category}&currentPage=${currentPage}&size=12&sortBy=${sorting}&ascOrDesc=${isAsc}`,
         "method": "GET",
@@ -213,6 +226,21 @@
         $('#gift-cards-box').empty()
         console.log(response);
         let rows = response['content'];
+
+        let pageable = response['pageable'];
+        console.log(response.totalPages);
+
+        
+        // var paging = response. ;
+				var pagetotal = response.totalPages;
+
+				var startpage = 1;
+				var pstartno = 0;
+				var endpage = pagetotal;
+				var onepagelimit = response.numberOfElements;
+				var bottomlimit = 5;
+				var listcount = onepagelimit;
+				var total = listcount-pstartno;
 
         // let pagesUl = document.getElementById("pages")
 
@@ -248,6 +276,8 @@
         // let currentUl = document.getElementById("pages");
         // currentUl.create
 
+
+
         for (let i = 0; i < rows.length; i++) {
           let name = rows[i]['name']
           let details = rows[i]['details']
@@ -270,6 +300,76 @@
               </div>`
 
           $('#gift-cards-box').append(temp_html)
+
+
+
+					var listno = listcount-((pstartno*onepagelimit)+i);
+
+          pstartno = Number(pstartno);
+
+          $('#pagingArea').empty().append(
+					$( '<span>' ).addClass( 'arrow' ).append(
+						$( '<em>' ).addClass( 'first' ).text( '처음페이지' ).click( function(){
+						if( pstartno > 0 ){
+
+
+              // category?category=${category}&currentPage=${currentPage}&size=12&sortBy=${sorting}&ascOrDesc=${isAsc}
+
+							// location.href = window.location.pathname.split("/").pop()+'?pstartno=0';
+							location.href = window.location.pathname.split("/").pop()+`category?category=${category}&currentPage=${currentPage}&size=12&sortBy=${sorting}&ascOrDesc=${isAsc}`;
+						}else {
+							alert('처음 페이지 입니다.');
+						}
+						})
+					).append(
+						$( '<em>' ).addClass( 'prev' ).text( '이전페이지' ).click( function(){
+						if( pstartno > 0 ){
+							location.href = window.location.pathname.split("/").pop()+'?pstartno='+(Number(pstartno)-1);
+						}else {
+							alert('처음 페이지 입니다.');
+						}
+						})
+					)
+				).append(
+				$( '<span>' ).addClass( 'number' ).append(
+					function(){
+					for( var i=startpage; i<=endpage; i++ ){
+						$( this ).append(
+						$( '<a number="'+i+'">' ).text(i).append(
+							function(){
+							if(pstartno+1 == i ){
+								$( this ).addClass( 'selected' );
+							}
+							}
+						).click( function(){
+							location.href = window.location.pathname.split("/").pop()+'?pstartno='+(Number($( this ).text())-1);
+						})
+						);
+					}
+					}
+				)
+				).append(
+				$( '<span>' ).addClass( 'arrow' ).append(
+					$( '<em>' ).addClass( 'next' ).text( '다음페이지' ).click( function(){
+					if(pstartno+1 < pagetotal ){
+						location.href = window.location.pathname.split("/").pop()+'?pstartno='+(pstartno+1);
+					}else {
+						alert('마지막 페이지입니다.');
+						return false;
+					}
+					})
+				).append(
+					$( '<em>' ).addClass( 'last' ).text( '마지막페이지' ).click( function(){
+					if(pstartno+1 < pagetotal ){
+						location.href = window.location.pathname.split("/").pop()+'?pstartno='+(pstartno-1);
+					}else {
+						alert('마지막 페이지입니다.');
+						return false;
+					}
+					})
+				)
+				);
+
         }
         
 
@@ -322,5 +422,6 @@
   </script>
 
 </body>
+
 
 </html>
